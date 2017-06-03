@@ -188,16 +188,12 @@
 
 - (NSTimer *)updateTimer{
     if (!_updateTimer) {
-        MJweakSelf
-        _updateTimer = [NSTimer timerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
-            
-            SLMusicMessageModel *messageModel =  [SLMusicOperationTool sharedSLMusicOperationTool].messageModel;
-            
-            weakSelf.startTimeLabel.text = [SLTimeTool getTimeStringWithTimeinterval:messageModel.costTime];
-            weakSelf.progessSlider.value = (float)(messageModel.costTime * 1.0)/messageModel.totalTime;
-       
-            weakSelf.pauseButton.selected = messageModel.isPlaying;
-        }];
+        
+        
+        
+        _updateTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(timerClick) userInfo:nil repeats:YES];
+   
+        
         
         [[NSRunLoop currentRunLoop] addTimer:_updateTimer forMode:NSRunLoopCommonModes];
         
@@ -219,6 +215,18 @@
 }
 
 #pragma mark -----------------------------------------------  执行多次的代码
+
+- (void)timerClick{
+    SLMusicMessageModel *messageModel =  [SLMusicOperationTool sharedSLMusicOperationTool].messageModel;
+    
+    self.startTimeLabel.text = [SLTimeTool getTimeStringWithTimeinterval:messageModel.costTime];
+    self.progessSlider.value = (float)(messageModel.costTime * 1.0)/messageModel.totalTime;
+    
+    self.pauseButton.selected = messageModel.isPlaying;
+}
+
+
+
 - (void)displayLinkClick{
   
     SLMusicMessageModel *messageModel = [SLMusicOperationTool sharedSLMusicOperationTool].messageModel;
